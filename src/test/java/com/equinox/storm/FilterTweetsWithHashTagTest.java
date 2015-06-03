@@ -5,11 +5,8 @@ import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class FilterTweetsWithHashTagTest {
 
