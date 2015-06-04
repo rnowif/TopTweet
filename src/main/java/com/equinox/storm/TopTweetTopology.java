@@ -16,6 +16,7 @@ public class TopTweetTopology {
     public static final String TWEET_SPOUT_ID = "tweet-spout";
     public static final String FILTER_HASHTAGS_ID = "filter-hashtags";
     public static final String COUNT_HASHTAG_ID = "count-hashtag";
+    public static final String REPORTER_ID = "reporter";
 
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException {
         TopologyBuilder builder = buildTopology();
@@ -37,6 +38,7 @@ public class TopTweetTopology {
 
         builder.setBolt(FILTER_HASHTAGS_ID, new FilterTweetsWithHashTag(), 10).shuffleGrouping(TWEET_SPOUT_ID);
         builder.setBolt(COUNT_HASHTAG_ID, new Counter(), 10).fieldsGrouping(FILTER_HASHTAGS_ID, new Fields(FilterTweetsWithHashTag.HASHTAG_FIELD));
+        builder.setBolt(REPORTER_ID, new RedisReporter(new RedisClientBuilder("localhost",6379), TOP_TWEET_TOPOLOGY_ID), 1).globalGrouping(COUNT_HASHTAG_ID);
 
         return builder;
     }
